@@ -1,6 +1,6 @@
 ---
 title: Deploying and operating it
-description: ankacloud is a long-running process that runs on any small server, with internet reachability so sandboxes can call back to its memory API.
+description: ankacloud is a lightweight long-running process that runs on any small server — it just needs a public address so sandboxes can call back to its memory API.
 eyebrow: Deployment
 ---
 
@@ -10,7 +10,7 @@ The control plane is a long-running process: the reconciler needs to keep runnin
 
 You need Python ≥ 3.11 and a public address (for the web UI and for sandboxes calling the memory API).
 
-## Locally
+## Running locally
 
 ```bash
 git clone https://github.com/tao12345666333/ankacloud.git
@@ -20,7 +20,7 @@ uv run pytest -q        # full unit test suite; no external services or keys nee
 uv run uvicorn ankacloud.main:app --host 127.0.0.1 --port 8000
 ```
 
-Then open <http://127.0.0.1:8000>. Empty keys are enough to run the tests and explore the UI; to launch sandboxes and call models, configure:
+Then open <http://127.0.0.1:8000>. Empty keys are enough to run the tests and explore the UI; when you're ready to launch sandboxes and call models, configure:
 
 | Variable | What it is |
 | --- | --- |
