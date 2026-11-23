@@ -1,0 +1,47 @@
+---
+// A real capture of the running product, framed like the page's other shots.
+// The images live in public/screenshots/ and are only shown cropped to their
+// top part (crop="top:<CSS px>") or whole (crop="full").
+interface Props {
+  /** File name in public/screenshots/, without the extension. */
+  name: string;
+  /** CSS width and height of the source image (the PNGs are 2x). */
+  width: number;
+  height: number;
+  /** "top:<px>" keeps the top of the image, "full" keeps all of it. */
+  crop?: string;
+  alt: string;
+  caption?: string;
+  class?: string;
+  priority?: boolean;
+}
+
+const { name, width, height, crop = "full", alt, caption, class: cls, priority = false } = Astro.props;
+const [mode, px] = crop.split(":");
+const shown = mode === "top" ? Number(px) : height;
+---
+
+<figure class:list={["shot", cls]}>
+  <div class="frame" style={`aspect-ratio:${width}/${shown}`}>
+    <img
+      src={`/screenshots/${name}.webp`}
+      alt={alt}
+      width={width}
+      height={shown}
+      loading={priority ? "eager" : "lazy"}
+      decoding="async"
+    />
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .shot { margin: 0; }
+  .frame {
+    border-radius: var(--r-lg); overflow: hidden;
+    border: 1px solid var(--border-strong); background: var(--surface);
+    box-shadow: var(--shadow-3);
+  }
+  img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  figcaption { margin-top: 12px; font-size: 13px; color: var(--text-3); text-align: center; }
+</style>

@@ -1,6 +1,6 @@
 ---
 // The day-to-day surfaces, each one a real screenshot of the running product.
-import ProductShot from "./ProductShot.astro";
+import Screenshot from "./Screenshot.astro";
 import { t, type Lang } from "../i18n/ui";
 
 interface Props {
@@ -9,7 +9,12 @@ interface Props {
 
 const { lang } = Astro.props;
 const d = t(lang).workflows;
-const sources = ["/screenshots/board-desktop.webp", "/screenshots/memory-desktop.webp", "/screenshots/home-desktop.webp"];
+// Each surface is a real capture, cropped to what it is about.
+const shots = {
+  board: { name: "board", width: 1280, height: 900, crop: "full" },
+  memory: { name: "settings-memory", width: 1280, height: 900, crop: "full" },
+  home: { name: "home", width: 1280, height: 900, crop: "full" },
+} as const;
 ---
 
 <section class="section" id="workflows">
@@ -28,7 +33,14 @@ const sources = ["/screenshots/board-desktop.webp", "/screenshots/memory-desktop
               <h3>{s.title}</h3>
               <p>{s.body}</p>
             </div>
-            <ProductShot src={sources[i]} alt={s.alt} width={1440} height={900} class="surface-shot" />
+            <Screenshot
+              name={shots[s.shot].name}
+              width={shots[s.shot].width}
+              height={shots[s.shot].height}
+              crop={shots[s.shot].crop}
+              alt={s.title}
+              class="surface-shot"
+            />
           </div>
         ))
       }

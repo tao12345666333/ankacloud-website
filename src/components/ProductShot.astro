@@ -1,38 +1,33 @@
 ---
-// A product screenshot in a window frame. Every image is a real capture of a
-// running ankacloud (see README: screenshots), so the frame stays quiet and
-// lets the UI carry the page.
+// The hero screenshot: a real capture in a browser-chrome frame.
+import Screenshot from "./Screenshot.astro";
+
 interface Props {
-  src: string;
+  name: string;
+  width: number;
+  height: number;
+  crop?: string;
   alt: string;
   caption?: string;
-  width?: number;
-  height?: number;
-  /** "browser" draws the full window chrome; "panel" only a hairline. */
-  chrome?: "browser" | "panel";
-  priority?: boolean;
   class?: string;
 }
 
-const { src, alt, caption, width = 1440, height = 900, chrome = "browser", priority = false, class: cls } = Astro.props;
-const isPanel = chrome === "panel";
+const { name, width, height, crop, alt, caption, class: cls } = Astro.props;
 ---
 
 <figure class:list={["shot", cls]}>
-  <div class:list={["frame", { "frame-panel": isPanel }]}>
-    {
-      !isPanel && (
-        <div class="bar" aria-hidden="true">
-          <span class="lights"><i /><i /><i /></span>
-          <span class="url">
-            <svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2" /><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" /></svg>
-            ankacloud.example
-          </span>
-          <span class="bar-spacer" aria-hidden="true"></span>
-        </div>
-      )
-    }
-    <img src={src} alt={alt} width={width} height={height} loading={priority ? "eager" : "lazy"} decoding="async" />
+  <div class="frame">
+    <div class="bar" aria-hidden="true">
+      <span class="lights"><i /><i /><i /></span>
+      <span class="url">
+        <svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="9.5" rx="2" /><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" /></svg>
+        ankacloud.example
+      </span>
+      <span class="bar-spacer" aria-hidden="true"></span>
+    </div>
+    <div class="body">
+      <Screenshot name={name} width={width} height={height} crop={crop} alt={alt} />
+    </div>
   </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
@@ -45,7 +40,8 @@ const isPanel = chrome === "panel";
     background: var(--surface);
     box-shadow: var(--shadow-3);
   }
-  .frame-panel { border-radius: var(--r-md); box-shadow: var(--shadow-2); }
+  .body { display: block; }
+  .body :global(.frame) { border: none; border-radius: 0; box-shadow: none; }
   .bar {
     display: flex; align-items: center; gap: 12px; height: 34px; padding: 0 12px;
     background: var(--surface-2); border-bottom: 1px solid var(--border);
@@ -58,8 +54,7 @@ const isPanel = chrome === "panel";
     background: var(--surface); border: 1px solid var(--border);
     font-size: 11.5px; color: var(--text-3); font-family: var(--font-mono);
   }
-  .bar-spacer { width: 42px; flex: none; }
   .url svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2; }
-  img { width: 100%; height: auto; background: var(--bg); }
+  .bar-spacer { width: 42px; flex: none; }
   figcaption { margin-top: 12px; font-size: 13px; color: var(--text-3); text-align: center; }
 </style>

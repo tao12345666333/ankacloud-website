@@ -1,0 +1,53 @@
+---
+// The full picture set: a wide phone capture and a dark-theme Board side by
+// side, then three tall ones — the two phone screens and the kong-operator
+// review — each captioned with what it actually shows.
+import Screenshot from "./Screenshot.astro";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).gallery;
+---
+
+<section class="section" id="screens">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2>{d.title}</h2>
+      <p>{d.lede}</p>
+    </div>
+
+    <div class="rows">
+      <div class="row row-phones">
+        <Screenshot name="mobile-thread" width={591} height={1280} alt={d.wide.alt} caption={d.wide.caption} />
+        <Screenshot name="mobile-drawer" width={819} height={1280} alt={d.tall.alt} caption={d.tall.caption} />
+        <Screenshot name="mobile-home" width={819} height={1280} alt={d.mobile.alt} caption={d.mobile.caption} />
+        <Screenshot name="dark-thread" width={819} height={1280} alt={d.darkThread.alt} caption={d.darkThread.caption} />
+      </div>
+      <div class="row row-wide">
+        <Screenshot name="thread-kong-review" width={1280} height={1250} alt={d.review.alt} caption={d.review.caption} />
+        <Screenshot name="dark-board" width={819} height={1280} alt={d.dark.alt} caption={d.dark.caption} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* A row of four phone-width screens, then the two wide captures a half
+     each; the wide pair is cropped to the same height so the row is level. */
+  .rows { display: flex; flex-direction: column; gap: 40px; }
+  .row { display: grid; gap: 16px; align-items: start; }
+  .row-phones { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .row-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .row :global(.shot) { min-width: 0; }
+  .row-wide :global(.frame) { aspect-ratio: 16 / 10; }
+  @media (max-width: 900px) {
+    .row-phones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .row-wide { grid-template-columns: 1fr; }
+    .row-wide :global(.frame) { aspect-ratio: auto; }
+  }
+</style>

@@ -9,7 +9,6 @@ interface Props {
 
 const { lang } = Astro.props;
 const d = t(lang).hero;
-const isZh = lang === "zh";
 ---
 
 <section class="hero">
@@ -43,13 +42,12 @@ const isZh = lang === "zh";
 
     <div class="hero-shot">
       <ProductShot
-        src="/screenshots/thread-desktop.webp"
-        alt={isZh
-          ? "ankacloud Web UI：左侧是按项目分组的 thread 列表，右侧是 agent 在 sandbox 中的对话与工具调用"
-          : "The ankacloud web UI: threads grouped by project on the left, the agent's conversation and tool calls in a sandbox on the right"}
-        width={1440}
-        height={900}
-        priority
+        name="thread-sse-fix"
+        width={1280}
+        height={860}
+        crop="full"
+        alt={d.alt}
+        caption={d.caption}
       />
     </div>
   </div>

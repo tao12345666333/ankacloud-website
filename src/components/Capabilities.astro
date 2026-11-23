@@ -1,6 +1,8 @@
 ---
 // The rest of the feature list, kept quiet: it is the README's key features,
-// one line each, so nothing a reader came looking for is missing.
+// one line each, so nothing a reader came looking for is missing. Four of them
+// carry a real capture of the setting they describe.
+import Screenshot from "./Screenshot.astro";
 import { t, type Lang } from "../i18n/ui";
 
 interface Props {
@@ -19,12 +21,26 @@ const d = t(lang).capabilities;
     </div>
     <ul class="caps">
       {
-        d.items.map(([title, body]) => (
-          <li>
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </li>
-        ))
+        d.items.map((item) => {
+          const key = "shot" in item ? item.shot : null;
+          const shot = key ? d.shots[key as keyof typeof d.shots] : null;
+          return (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+              {shot && (
+                <Screenshot
+                  name={`settings-${key}`}
+                  width={1280}
+                  height={900}
+                  crop="top:340"
+                  alt={shot.alt}
+                  class="cap-shot"
+                />
+              )}
+            </li>
+          );
+        })
       }
     </ul>
   </div>
@@ -38,8 +54,11 @@ const d = t(lang).capabilities;
     border-radius: var(--r-lg); overflow: hidden; background: var(--surface);
   }
   .caps li {
-    padding: 24px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 24px;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
   }
+  .cap-shot { margin-top: 18px; }
+  .cap-shot :global(figcaption) { display: none; }
   h3 { font-size: 15px; font-weight: 620; letter-spacing: -0.01em; }
   p { margin-top: 8px; font-size: 13.5px; line-height: 1.7; color: var(--text-2); }
   @media (max-width: 900px) {

@@ -31,6 +31,8 @@ export const ui = {
       start: "Get started",
       how: "See how it works",
       facts: ["Python process", "SQLite file", "1 thread = 1 sandbox", "Apache-2.0"],
+      alt: "The ankacloud thread view: the agent's tool calls and final report for a fix, running in its own cloud sandbox",
+      caption: "A real thread: the agent fixes an SSE reconnect race in its own E2B sandbox, runs the 416-test suite and opens draft PR #127.",
     },
     features: {
       eyebrow: "Why ankacloud",
@@ -99,19 +101,19 @@ export const ui = {
           tag: "Board",
           title: "Five lanes, all your work at a glance",
           body: "Every thread is a card on the Board. The lane comes from the last turn — Todo, In progress, Needs you (the last turn failed), Waiting for you (the agent answered), Done — so it can never disagree with the facts.",
-          alt: "The ankacloud Board: Todo, In progress, Needs you, Waiting for you and Done lanes, one card per thread",
+          shot: "board",
         },
         {
           tag: "Memory",
           title: "Memory, persona and skills are owned by the control plane",
           body: "MEMORY.md, SOUL.md, IDENTITY.md and facts live in one directory on the control plane, and every sandbox reads and writes the same one over HTTP. Archiving a thread folds its conclusions back into global memory. Edit once, and it applies everywhere.",
-          alt: "The ankacloud Memory panel: view and edit MEMORY.md, SOUL.md, IDENTITY.md and facts",
+          shot: "memory",
         },
         {
           tag: "Anka",
           title: "Anka: a resident session that needs no sandbox",
           body: "Anka runs inside the control plane with no shell. It answers what does not need hands, looks up thread status and memory, searches the web, and dispatches work with create_thread / send_to_thread — one Telegram message and the work starts in the cloud.",
-          alt: "Anka, ankacloud's resident session: answering questions and dispatching work to threads",
+          shot: "home",
         },
       ],
     },
@@ -165,17 +167,90 @@ export const ui = {
       truth: "single source of truth",
       local: "local",
     },
+    gallery: {
+      eyebrow: "In the wild",
+      title: "Every screen here is the product, not a mockup.",
+      lede: "Every screen on this page was captured from one running control plane — real E2B sandboxes, real models, real GitHub. Behind them: a thread that fixed an SSE reconnect race and opened a PR, a dependency audit, a PR review in another repository, a web-research digest, a small script and Anka tying them together.",
+      wide: {
+        alt: "A thread on a phone: a script the agent wrote and ran, with its files listed at the end of the answer",
+        caption: "A thread on a phone: the agent's script, and the files it left behind.",
+      },
+      dark: {
+        alt: "The Board in dark mode: Todo, In progress, Needs you, Waiting for you and Done lanes with thread cards",
+        caption: "The Board in dark mode, following the system theme.",
+      },
+      tall: {
+        alt: "The phone drawer: threads grouped under their projects, with Board, GitHub and Settings below",
+        caption: "Threads grouped by project, in the phone drawer.",
+      },
+      mobile: {
+        alt: "Anka on a phone: one status answer that lists every thread, its PR and where it stands",
+        caption: "Anka on a phone: one answer across every thread.",
+      },
+      dialog: {
+        alt: "The Skills dialog for a thread: pr-review, release-notes and web-digest all ticked",
+        caption: "Choosing a thread's skills: tick a subset, or leave it empty to mount them all.",
+      },
+      review: {
+        alt: "A read-only review of three open kong-operator pull requests, each with a verdict and the tests that were run",
+        caption: "A read-only PR review in another repository, with a verdict and test result per PR.",
+      },
+      darkThread: {
+        alt: "A script thread in dark mode, showing the tool calls, the model, the sandbox provider and the answer",
+        caption: "The same kind of thread in dark mode, with its model and sandbox in the header.",
+      },
+    },
     capabilities: {
       eyebrow: "And the rest",
       title: "Everything you would expect,<br />all in one process.",
       items: [
-        ["Projects and GitHub", "Set a repository, env vars, machine size and default provider, and the thread clones it, works on its own branch and opens a PR with gh pr create. The GitHub token never enters the sandbox; E2B's egress proxy injects it."],
-        ["Skills", "Create them in the web Skills panel or let Anka use the built-in skill-creator; both write the same directory on the control plane. Threads mount them at creation, and edits hot-reload through SkillWatcher."],
-        ["Providers", "Each provider holds a list of enabled models with their own context window, output limit and reasoning effort, and each thread picks its provider and model explicitly."],
-        ["MCP", "MCP servers are bound into a thread's sandbox; only http servers you explicitly opt in reach Anka's tools."],
-        ["Sandbox runtimes", "Beyond E2B, Tenki and Runta sit behind one SandboxProvider abstraction, and a capability catalog builds each runtime's own form."],
-        ["Schedules and notifications", "Anka runs or dispatches scheduled tasks; each finished turn can push one Telegram notification with the status, title and thread id in a single line."],
+        {
+          title: "Projects and GitHub",
+          body: "Set a repository, env vars, machine size and default provider, and the thread clones it, works on its own branch and opens a PR with gh pr create. The GitHub token never enters the sandbox; E2B's egress proxy injects it.",
+          shot: "projects",
+        },
+        {
+          title: "Skills",
+          body: "Create them in the web Skills panel or let Anka use the built-in skill-creator; both write the same directory on the control plane. Threads mount them at creation, and edits hot-reload through SkillWatcher.",
+          shot: "skills",
+        },
+        {
+          title: "Providers",
+          body: "Each provider holds a list of enabled models with their own context window, output limit and reasoning effort, and each thread picks its provider and model explicitly.",
+          shot: "providers",
+        },
+        {
+          title: "Sandbox runtimes",
+          body: "Beyond E2B, Tenki and Runta sit behind one SandboxProvider abstraction, and a capability catalog builds each runtime's own form.",
+          shot: "sandbox",
+        },
+        {
+          title: "MCP",
+          body: "MCP servers are bound into a thread's sandbox; only http servers you explicitly opt in reach Anka's tools.",
+        },
+        {
+          title: "Schedules and notifications",
+          body: "Anka runs or dispatches scheduled tasks; each finished turn can push one Telegram notification with the status, title and thread id in a single line.",
+        },
       ],
+      shots: {
+        projects: {
+          alt: "Projects settings: three repositories — ankacloud and ankaloop on GitHub, kong-operator read-only — each with its thread count",
+          caption: "Projects: repositories, branches and the threads working in them.",
+        },
+        skills: {
+          alt: "Skills settings: a catalog of pr-review, release-notes and web-digest",
+          caption: "Skills on the control plane; each thread mounts what it needs.",
+        },
+        providers: {
+          alt: "Model providers settings: Baseten with GLM-5.3, Kimi-K3.1-Pro and DeepSeek, plus OpenRouter",
+          caption: "One provider, several models — every thread picks its own.",
+        },
+        sandbox: {
+          alt: "Sandbox settings: the E2B Cloud provider with lifetime, idle pause and machine size",
+          caption: "Sandbox lifetime, idle pause and size, per runtime.",
+        },
+      },
     },
     quickstart: {
       eyebrow: "Quickstart",
@@ -255,6 +330,8 @@ export const ui = {
       start: "开始使用",
       how: "看它是怎么工作的",
       facts: ["个 Python 进程", "个 SQLite 文件", "1 thread = 1 sandbox", "Apache-2.0"],
+      alt: "ankacloud 的 thread 视图：agent 在云 sandbox 里修一个 bug 时的工具调用与最终报告",
+      caption: "一个真实的 thread：agent 在自己的 E2B sandbox 里修好 SSE 重连竞态，跑完 416 个测试，开出草稿 PR #127。",
     },
     features: {
       eyebrow: "为什么是 ankacloud",
@@ -323,19 +400,19 @@ export const ui = {
           tag: "Board",
           title: "五条泳道，所有工作一眼可见",
           body: "每个 thread 是 Board 上的一张卡。状态由最后一轮推导——Todo、进行中、需要你（上一轮失败）、等你回复（agent 已经回答）、完成——从不存库，所以永远不会和事实对不上。",
-          alt: "ankacloud 的 Board 视图：Todo、In progress、Needs you、Waiting for you、Done 五列泳道，每个 thread 一张卡",
+          shot: "board",
         },
         {
           tag: "记忆",
           title: "记忆、人格与 skills 都由控制面拥有",
           body: "MEMORY.md、SOUL.md、IDENTITY.md 和事实都放在控制面的同一个目录里，每个 sandbox 通过 HTTP 读写同一份；归档 thread 时，dreamer 会把它得出的结论折回全局记忆。改一次，处处生效。",
-          alt: "ankacloud 的 Memory 面板：可查看和编辑 MEMORY.md、SOUL.md、IDENTITY.md 与事实",
+          shot: "memory",
         },
         {
           tag: "Anka",
           title: "Anka：不需要 sandbox 的常驻会话",
           body: "Anka 跑在控制面里，没有 shell。它回答不需要动手的问题、查 thread 状态、查记忆、搜索网页，并用 create_thread / send_to_thread 把活派给 sandbox——从 Telegram 发一句话，活就在云上开工了。",
-          alt: "ankacloud 的 Anka 常驻会话：在控制面里回答问题并派单给 thread",
+          shot: "home",
         },
       ],
     },
@@ -389,17 +466,90 @@ export const ui = {
       truth: "唯一真源",
       local: "本地",
     },
+    gallery: {
+      eyebrow: "真实界面",
+      title: "这里的每一屏都是产品本身，不是示意图。",
+      lede: "这一页的每一屏都来自同一个正在运行的控制面——真实的 E2B sandbox、真实的模型、真实的 GitHub。背后是一个修好 SSE 重连竞态并开了 PR 的 thread、一次依赖审计、另一个仓库的 PR 评审、一份网页调研摘要、一个小脚本，以及把它们串起来的 Anka。",
+      wide: {
+        alt: "手机上的一个 thread：agent 写好并运行的脚本，回答末尾列出了它留下的文件",
+        caption: "手机上的一个 thread：agent 写的脚本，以及它留下的文件。",
+      },
+      dark: {
+        alt: "深色模式下的 Board：Todo、In progress、Needs you、Waiting for you、Done 五列与 thread 卡片",
+        caption: "跟随系统主题的深色 Board。",
+      },
+      tall: {
+        alt: "手机上的 ankacloud 侧边栏抽屉，thread 按项目分组",
+        caption: "按项目分组的 thread，手机抽屉里。",
+      },
+      mobile: {
+        alt: "手机上的 Anka：一个状态回答列出每个 thread、它的 PR 和进度",
+        caption: "手机上的 Anka：一个回答覆盖所有 thread。",
+      },
+      dialog: {
+        alt: "一个 thread 的 Skills 弹窗：pr-review、release-notes、web-digest 全部勾选",
+        caption: "为 thread 选 skills：勾选一部分，或者留空以全部挂载。",
+      },
+      review: {
+        alt: "对 kong-operator 三个开放 PR 的只读评审，每个都有结论和跑过的测试",
+        caption: "另一个仓库里的只读 PR 评审：每个 PR 一句结论、一条测试结果。",
+      },
+      darkThread: {
+        alt: "深色模式下的脚本 thread：工具调用、模型、sandbox 运行时与最终回答",
+        caption: "深色模式下的同类 thread，标题栏里是它用的模型和 sandbox。",
+      },
+    },
     capabilities: {
       eyebrow: "其它",
       title: "该有的都有，<br />而且都在同一个进程里。",
       items: [
-        ["项目与 GitHub", "配好仓库、环境变量、机型与默认 provider，thread 自己 clone、开分支、用 gh pr create 开 PR；GitHub token 从不进入 sandbox，由 E2B 出口代理注入。"],
-        ["Skills", "在 Web 的 Skills 面板或让 Anka 用内置 skill-creator 创建，落到控制面同一个目录；新建 thread 时挂载，改动由 SkillWatcher 热加载。"],
-        ["Providers", "每个 provider 维护一组可用模型（上下文窗口、输出上限、推理强度），thread 显式选择 provider 与模型。"],
-        ["MCP", "MCP server 按 thread 绑定进 sandbox；只有显式勾选的 http server 才会出现在 Anka 的工具里。"],
-        ["Sandbox 运行时", "E2B、Tenki、Runta 之外是一层 SandboxProvider 抽象，每种运行时按能力目录生成自己的表单。"],
-        ["定时与通知", "定时任务由 Anka 执行或转派；每轮结束可以推一条 Telegram 完成通知，状态、标题、thread id 一行说完。"],
+        {
+          title: "项目与 GitHub",
+          body: "配好仓库、环境变量、机型与默认 provider，thread 自己 clone、开分支、用 gh pr create 开 PR；GitHub token 从不进入 sandbox，由 E2B 出口代理注入。",
+          shot: "projects",
+        },
+        {
+          title: "Skills",
+          body: "在 Web 的 Skills 面板或让 Anka 用内置 skill-creator 创建，落到控制面同一个目录；新建 thread 时挂载，改动由 SkillWatcher 热加载。",
+          shot: "skills",
+        },
+        {
+          title: "Providers",
+          body: "每个 provider 维护一组可用模型（上下文窗口、输出上限、推理强度），thread 显式选择 provider 与模型。",
+          shot: "providers",
+        },
+        {
+          title: "Sandbox 运行时",
+          body: "E2B、Tenki、Runta 之外是一层 SandboxProvider 抽象，每种运行时按能力目录生成自己的表单。",
+          shot: "sandbox",
+        },
+        {
+          title: "MCP",
+          body: "MCP server 按 thread 绑定进 sandbox；只有显式勾选的 http server 才会出现在 Anka 的工具里。",
+        },
+        {
+          title: "定时与通知",
+          body: "定时任务由 Anka 执行或转派；每轮结束可以推一条 Telegram 完成通知，状态、标题、thread id 一行说完。",
+        },
       ],
+      shots: {
+        projects: {
+          alt: "Projects 设置：三个仓库——GitHub 上的 ankacloud、ankaloop，以及只读的 kong-operator——各自带着 thread 数",
+          caption: "Projects：仓库、分支，以及在它们里面干活的 thread。",
+        },
+        skills: {
+          alt: "Skills 设置：pr-review、release-notes、web-digest 组成的目录",
+          caption: "Skills 放在控制面，每个 thread 按需挂载。",
+        },
+        providers: {
+          alt: "Model providers 设置：Baseten 下挂 GLM-5.3、Kimi-K3.1-Pro、DeepSeek，以及 OpenRouter",
+          caption: "一个 provider 下挂几个模型——每个 thread 自己选。",
+        },
+        sandbox: {
+          alt: "Sandbox 设置：E2B Cloud 运行时，含生命周期、闲置暂停与机型",
+          caption: "每种运行时的生命周期、闲置暂停与机型。",
+        },
+      },
     },
     quickstart: {
       eyebrow: "快速开始",
