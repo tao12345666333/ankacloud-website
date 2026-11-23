@@ -20,8 +20,6 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      enablement: ${{ steps.pages.outputs.enablement }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,14 +30,6 @@ jobs:
 
       - run: npm ci
 
-      # GitHub Pages has to publish from Actions for deploy-pages to work; a
-      # site set to "Deploy from a branch" (the default) answers with
-      # `enablement: branch` here instead of a confusing failure at deploy.
-      - id: pages
-        uses: actions/configure-pages@v5
-        with:
-          # Read the Pages site's settings without changing them.
-          enablement: false
 
       # Pages serves the site under /<repo>/, so both the URL and the base path
       # change; robots.txt in the repo keeps staging out of search engines.
@@ -59,9 +49,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - if: needs.build.outputs.enablement == 'branch'
-        run: |
-          echo "::error::GitHub Pages is set to 'Deploy from a branch'. Set Settings → Pages → Source to 'GitHub Actions' and re-run this workflow."
-          exit 1
       - id: deployment
         uses: actions/deploy-pages@v4
