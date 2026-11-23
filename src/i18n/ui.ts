@@ -23,8 +23,8 @@ export const ui = {
     },
     hero: {
       pill: "v0.11 · pick a provider and model per thread",
-      title1: "The agent you carry around.",
-      title2Before: "Working in an ",
+      title1: "The agent you carry around,",
+      title2Before: "working in an ",
       title2Accent: "isolated",
       title2After: " cloud sandbox.",
       lede: "ankacloud is a single-user agent-in-sandbox control plane. You open a thread in the web UI or Telegram, and it writes code, runs a shell, fetches pages and opens PRs inside its own cloud sandbox — while remembering who you are and every decision you made in every other thread.",
