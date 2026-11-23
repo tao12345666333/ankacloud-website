@@ -30,6 +30,16 @@ jobs:
 
       - run: npm ci
 
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      # "Deploy from a branch" (the default when Pages is switched on) rejects
+      # a workflow deployment; say so here instead of failing at deploy time.
+      - if: steps.pages.outputs.enablement == 'branch'
+        run: |
+          echo "::error::GitHub Pages is set to 'Deploy from a branch'. Set Settings → Pages → Source to 'GitHub Actions' and re-run this workflow."
+          exit 1
+
       # Pages serves the site under /<repo>/, so both the URL and the base path
       # change; robots.txt in the repo keeps staging out of search engines.
       - run: npm run build
