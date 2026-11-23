@@ -36,7 +36,7 @@ export const ui = {
     },
     features: {
       eyebrow: "Why ankacloud",
-      title: "There are many background agents.<br />This one starts from memory and persona.",
+      title: "Many background agents.<br />This one starts from memory.",
       lede: "Most products turn the background coding agent into ticket automation: drop an issue in, wait for a PR to come out. ankacloud treats the agent's long-term memory and persona as first-class citizens — it is less a disposable machine than a person you take with you.",
       items: [
         {
