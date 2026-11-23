@@ -1,0 +1,66 @@
+---
+import "../styles/global.css";
+import { defaultLang, languages, type Lang } from "../i18n/ui";
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Lang;
+  /** The same page in the other languages, so each one can link to it. */
+  alternates: Partial<Record<Lang, string>>;
+}
+
+const { title, description, lang, alternates } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+const htmlLang = { en: "en", zh: "zh-CN" } as const;
+---
+
+<!doctype html>
+<html lang={htmlLang[lang]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f7f5f0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      (Object.entries(alternates) as [Lang, string][]).map(([code, href]) => (
+        <link rel="alternate" hreflang={htmlLang[code]} href={new URL(href, Astro.site)} />
+      ))
+    }
+    <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLang] ?? "/", Astro.site)} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ankacloud" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === "zh" ? "zh_CN" : "en_US"} />
+    <meta property="og:locale:alternate" content={lang === "zh" ? "en_US" : "zh_CN"} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline>
+      // Apply the saved theme before first paint, like the Web UI does, so a
+      // dark-mode visitor never sees a white flash.
+      (function () {
+        try {
+          var t = localStorage.getItem("ankacloud.theme");
+          if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body data-lang={lang} data-languages={Object.keys(languages).join(",")}>
+    <slot />
+  </body>
+</html>

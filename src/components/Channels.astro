@@ -1,0 +1,128 @@
+---
+// Telegram and the web are the same control plane: one thread, two windows.
+import BrandMark from "./BrandMark.astro";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).channels;
+const join = lang === "zh" ? "和" : "and";
+---
+
+<section class="section" id="channels">
+  <div class="shell channels">
+    <div class="channels-copy">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2 set:html={d.title} />
+      <p class="lede">
+        {d.ledeBefore}<code>create_thread</code>{d.ledeAfter}
+      </p>
+      <ul class="notes">
+        {d.notes.map((n) => <li>{n}</li>)}
+      </ul>
+    </div>
+
+    <div class="channels-side">
+      <div class="chat" aria-label="Anka">
+        <div class="chat-head">
+          <BrandMark size={26} />
+          <span><b>Anka</b><small>{d.bot}</small></span>
+        </div>
+        <div class="msg me">{d.ask}</div>
+        <div class="msg bot">
+          <span class="bot-name">Anka</span>
+          {d.dispatchMsg}
+        </div>
+        <div class="dispatch">
+          <span class="chip chip-accent">{d.dispatched}</span>
+          <code>t-1a2b3c4d5e6f</code>
+          <span class="muted">{d.current}</span>
+        </div>
+        <div class="msg bot">
+          <span class="bot-name">{d.doneTitle}</span>
+          {d.doneBodyBefore}<code>/reset</code> {join} <code>/start</code>{d.doneBodyMid}<code>/switch</code>{d.doneBodyAfter}
+          <code>docs/telegram-commands</code>{d.doneBodyEnd}
+        </div>
+        <div class="notify">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v4.5L4.5 17h15L18 13.5V9a6 6 0 0 0-6-6z" /><path d="M10 20a2 2 0 0 0 4 0" /></svg>
+          <span>✅ <b>{d.notify}</b></span>
+          <code>docs/telegram-commands</code>
+        </div>
+      </div>
+
+      <ul class="cmds">
+        {
+          d.commands.map(([cmd, desc]) => (
+            <li>
+              <code>{cmd}</code>
+              <span>{desc}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  code { font-family: var(--font-mono); font-size: 12.5px; background: var(--code-bg); border: 1px solid var(--code-border);
+         border-radius: 5px; padding: 1px 6px; color: var(--text); }
+
+  .channels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px; }
+  .channels-copy h2 { font-size: clamp(28px, 3.6vw, 40px); margin-top: 14px; }
+  .lede { margin-top: 18px; font-size: 16px; line-height: 1.75; color: var(--text-2); }
+  .notes { margin: 24px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .notes li { position: relative; padding-left: 20px; font-size: 14px; color: var(--text-2); line-height: 1.6; }
+  .notes li::before {
+    content: ""; position: absolute; left: 2px; top: .55em; width: 6px; height: 6px; border-radius: 2px;
+    background: var(--accent); opacity: .7;
+  }
+
+  .channels-side { display: flex; flex-direction: column; gap: 20px; }
+  .chat {
+    border-radius: var(--r-xl); border: 1px solid var(--border-strong); background: var(--surface);
+    box-shadow: var(--shadow-3); padding: 0 16px 16px; overflow: hidden;
+  }
+  .chat-head {
+    display: flex; align-items: center; gap: 10px; margin: 0 -16px 14px; padding: 12px 16px;
+    border-bottom: 1px solid var(--border); background: var(--surface-2);
+  }
+  .chat-head b { display: block; font-size: 14px; }
+  .chat-head small { display: block; font-size: 11.5px; color: var(--text-3); }
+  .msg {
+    max-width: 92%; margin-top: 10px; padding: 9px 13px; border-radius: var(--r-lg);
+    font-size: 13.5px; line-height: 1.6; color: var(--text);
+  }
+  .msg code { font-size: 11.5px; }
+  .msg.me { margin-left: auto; background: var(--bubble); border-bottom-right-radius: 4px; }
+  .msg.bot { background: var(--surface-2); border-bottom-left-radius: 4px; }
+  .bot-name { display: block; margin-bottom: 3px; font-size: 11px; font-weight: 600; color: var(--accent-text); }
+  .dispatch {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0 0 2px;
+    font-size: 12px;
+  }
+  .dispatch .muted { color: var(--text-3); }
+  .notify {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding: 8px 12px;
+    border-radius: var(--r-md); border: 1px dashed var(--border-strong); background: var(--surface);
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .notify svg { width: 15px; height: 15px; fill: none; stroke: var(--ok); stroke-width: 1.7;
+                stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .notify b { color: var(--text); font-weight: 600; }
+  .notify code { font-size: 11.5px; margin-left: auto; }
+
+  .cmds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column;
+          border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; background: var(--surface); }
+  .cmds li { display: flex; align-items: baseline; gap: 12px; padding: 8px 14px; font-size: 13px; }
+  .cmds li + li { border-top: 1px solid var(--border); }
+  .cmds code { flex: none; min-width: 116px; background: none; border: none; padding: 0; color: var(--text); font-weight: 600; }
+  .cmds span { color: var(--text-2); }
+
+  @media (max-width: 900px) {
+    .channels { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>

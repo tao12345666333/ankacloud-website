@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import Architecture from "../components/Architecture.astro";
+import Workflows from "../components/Workflows.astro";
+import Channels from "../components/Channels.astro";
+import Memory from "../components/Memory.astro";
+import Capabilities from "../components/Capabilities.astro";
+import QuickStart from "../components/QuickStart.astro";
+import UseCases from "../components/UseCases.astro";
+import CTA from "../components/CTA.astro";
+import Footer from "../components/Footer.astro";
+import { path, t } from "../i18n/ui";
+
+const lang = "en";
+const d = t(lang).meta;
+---
+
+<Base title={d.title} description={d.description} lang={lang} alternates={{ en: path("en", "/"), zh: path("zh", "/") }}>
+  <Header lang={lang} otherHref={path("zh", "/")} />
+  <main>
+    <Hero lang={lang} />
+    <Features lang={lang} />
+    <Architecture lang={lang} />
+    <Workflows lang={lang} />
+    <Channels lang={lang} />
+    <Memory lang={lang} />
+    <Capabilities lang={lang} />
+    <QuickStart lang={lang} />
+    <UseCases lang={lang} />
+    <CTA lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</Base>

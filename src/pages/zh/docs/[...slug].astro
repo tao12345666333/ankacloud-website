@@ -1,0 +1,29 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Doc from "../../../layouts/Doc.astro";
+import { path, type Lang } from "../../../i18n/ui";
+
+export async function getStaticPaths() {
+  const zh = await getCollection("zh");
+  return zh.map((entry) => ({ params: { slug: entry.id }, props: { entry, lang: "zh" as Lang } }));
+}
+
+interface Props {
+  entry: CollectionEntry<"zh">;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Doc
+  title={entry.data.title}
+  description={entry.data.description}
+  eyebrow={entry.data.eyebrow}
+  lang={lang}
+  otherHref={path("en", `docs/${entry.id}`)}
+  alternates={{ en: path("en", `docs/${entry.id}`), zh: path("zh", `docs/${entry.id}`) }}
+>
+  <Content />
+</Doc>

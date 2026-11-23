@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ankacloud-website",
+  "compatibility_date": "2026-11-01",
+  // Astro writes a fully static site to dist/. Workers serves it directly from
+  // the edge; nothing runs per request.
+  "assets": {
+    "directory": "./dist",
+    // Serve the static 404.html (which picks English or Chinese from the URL)
+    // instead of an empty 404 for unknown paths.
+    "not_found_handling": "404-page"
+  }
+}

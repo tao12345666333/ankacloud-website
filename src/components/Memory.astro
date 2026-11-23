@@ -1,0 +1,109 @@
+---
+// Long-term memory as the product's core: one source of truth, every sandbox
+// reads and writes through it, and archiving folds conclusions back.
+import BrandMark from "./BrandMark.astro";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).memory;
+---
+
+<section class="section" id="memory">
+  <div class="shell memory">
+    <div class="memory-copy">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2>{d.title}</h2>
+      <p class="lede">
+        {d.ledeBefore}<code>~/.config/ankaloop/</code>{d.ledeAfter}
+      </p>
+
+      <ol class="steps">
+        {
+          d.steps.map(([title, body], i) => (
+            <li>
+              <span class="num">{i + 1}</span>
+              <div>
+                <b>{title}</b>
+                <p>{body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div class="memory-side">
+      <div class="tree" aria-label="~/.config/ankaloop/">
+        <div class="tree-head">
+          <BrandMark size={18} />
+          <code>~/.config/ankaloop/</code>
+          <span class="chip">{d.truth}</span>
+        </div>
+        <ul>
+          {
+            d.files.map(([name, desc]) => (
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4v13H6z" /><path d="M14 3.5v4h4" /></svg>
+                <code>{name}</code>
+                <span>{desc}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="tree-foot">
+          <span class="chip chip-ok"><span class="dot"></span>sandbox A · HTTP</span>
+          <span class="chip chip-ok"><span class="dot"></span>sandbox B · HTTP</span>
+          <span class="chip chip-accent"><span class="dot"></span>Anka · {d.local}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  code { font-family: var(--font-mono); font-size: 12.5px; background: var(--code-bg); border: 1px solid var(--code-border);
+         border-radius: 5px; padding: 1px 6px; color: var(--text); }
+
+  .memory { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); gap: 64px; align-items: center; }
+  .memory-copy h2 { font-size: clamp(28px, 3.6vw, 40px); margin-top: 14px; }
+  .lede { margin-top: 18px; font-size: 16px; line-height: 1.75; color: var(--text-2); }
+
+  .steps { list-style: none; margin: 30px 0 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .steps li { display: flex; gap: 14px; }
+  .num {
+    flex: none; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--accent-soft); color: var(--accent-text); font-size: 12.5px; font-weight: 650;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps b { display: block; font-size: 14.5px; font-weight: 620; }
+  .steps p { margin-top: 3px; font-size: 14px; line-height: 1.65; color: var(--text-2); }
+
+  .tree {
+    border-radius: var(--r-xl); border: 1px solid var(--border-strong); background: var(--surface);
+    box-shadow: var(--shadow-3); overflow: hidden;
+  }
+  .tree-head {
+    display: flex; align-items: center; gap: 10px; padding: 13px 16px;
+    border-bottom: 1px solid var(--border); background: var(--surface-2);
+  }
+  .tree-head code { background: none; border: none; padding: 0; font-size: 13px; font-weight: 600; }
+  .tree-head .chip { margin-left: auto; height: 20px; font-size: 11px; }
+  .tree ul { list-style: none; margin: 0; padding: 8px 8px 10px; }
+  .tree li { display: flex; align-items: center; gap: 10px; padding: 8px 8px; border-radius: var(--r-sm); }
+  .tree li:hover { background: var(--surface-2); }
+  .tree li svg { width: 15px; height: 15px; fill: none; stroke: var(--text-3); stroke-width: 1.6;
+                 stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .tree li code { min-width: 108px; background: none; border: none; padding: 0; font-size: 12.5px; color: var(--text); }
+  .tree li span { font-size: 12.5px; color: var(--text-3); }
+  .tree-foot { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--surface-2); }
+  .tree-foot .chip { background: var(--surface); border: 1px solid var(--border); font-size: 11px; height: 22px; color: var(--text-2); }
+
+  @media (max-width: 900px) {
+    .memory { grid-template-columns: 1fr; gap: 36px; }
+    .tree li code { min-width: 96px; }
+  }
+</style>

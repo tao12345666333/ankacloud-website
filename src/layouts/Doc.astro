@@ -1,0 +1,36 @@
+---
+import Base from "./Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { path, t, type Lang } from "../i18n/ui";
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  lang: Lang;
+  /** This page in the other language. */
+  otherHref: string;
+  /** The same page in every language, for hreflang. */
+  alternates: Partial<Record<Lang, string>>;
+}
+
+const { title, description, eyebrow, lang, otherHref, alternates } = Astro.props;
+const d = t(lang).docs;
+---
+
+<Base title={`${title} · ankacloud`} description={description} lang={lang} alternates={alternates}>
+  <Header lang={lang} otherHref={otherHref} />
+  <main class="doc">
+    <div class="shell doc-inner">
+      <a class="doc-back" href={path(lang, "/")}>{d.back}</a>
+      <article class="prose">
+        <p class="eyebrow">{eyebrow}</p>
+        <h1>{title}</h1>
+        <p class="lede">{description}</p>
+        <slot />
+      </article>
+    </div>
+  </main>
+  <Footer lang={lang} />
+</Base>

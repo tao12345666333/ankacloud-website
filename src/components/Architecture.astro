@@ -1,0 +1,215 @@
+---
+// The control-plane / sandbox split, drawn as the product's own diagram: the
+// control plane in the middle, sandboxes fanning out below it.
+import BrandMark from "./BrandMark.astro";
+import { DOCS, E2B_URL } from "../data/site";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).architecture;
+const [p3a, p3b, p3c] = d.props[2];
+const [p4a, p4b, p4c, p4d] = d.props[3];
+---
+
+<section class="section" id="architecture">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2 set:html={d.title} />
+      <p>{d.ledeBefore}<code>anka serve</code>{d.ledeAfter}</p>
+    </div>
+
+    <div class="diagram" role="img" aria-label={d.plane}>
+      <div class="clients" aria-hidden="true">
+        <div class="client">
+          <span class="node">
+            <span class="node-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2" /><path d="M8 20h8M12 16.5V20" /></svg>
+            </span>
+            <span><b>{d.web}</b><small>{d.webSub}</small></span>
+          </span>
+          <span class="drop"></span>
+        </div>
+        <div class="client">
+          <span class="node">
+            <span class="node-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 4.5L3 11l7 2.5L12.5 21 21 4.5z" /></svg>
+            </span>
+            <span><b>{d.telegram}</b><small>{d.telegramSub}</small></span>
+          </span>
+          <span class="drop"></span>
+        </div>
+      </div>
+
+      <div class="node plane">
+        <div class="plane-head">
+          <BrandMark size={20} />
+          <b>{d.plane}</b>
+          <span class="chip chip-accent">{d.planeChip}</span>
+        </div>
+        <div class="plane-grid">
+          {
+            d.modules.map(([name, desc]) => (
+              <div><b>{name}</b><small>{desc}</small></div>
+            ))
+          }
+        </div>
+        <div class="plane-mem">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6c0-1.4 3.6-2.5 8-2.5s8 1.1 8 2.5-3.6 2.5-8 2.5S4 7.4 4 6z" /><path d="M4 6v6c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6M4 12v6c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5v-6" /></svg>
+          <code>~/.config/ankaloop/</code>
+          <span>{d.memoryDir}</span>
+        </div>
+      </div>
+
+      <div class="fan" aria-hidden="true">
+        <svg viewBox="0 0 760 64" preserveAspectRatio="none">
+          <path d="M380 0V18M0.75 18h758.5M0.75 18v20M380 18v20M759.25 18v20" />
+        </svg>
+        <span class="label">{d.fan}</span>
+      </div>
+
+      <div class="sandboxes">
+        {
+          [
+            { id: "A", size: "2 vCPU", paused: false },
+            { id: "B", size: "4 GiB", paused: false },
+            { id: "C", size: null, paused: true },
+          ].map((b) => (
+            <div class:list={["node box", { paused: b.paused }]}>
+              <div class="box-head">
+                <span class:list={["status-dot", { paused: b.paused }]}></span>
+                <b>{d.sandbox} {b.id}</b>
+                <span class="chip">{d.thread} {b.id}</span>
+              </div>
+              <code>anka serve</code>
+              <small>{b.paused ? d.paused : `${d.running} · ${b.size}`}</small>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <ul class="props">
+      <li>
+        <b>{d.props[0][0]}</b>
+        <span>{d.props[0][1]}</span>
+      </li>
+      <li>
+        <b>{d.props[1][0]}</b>
+        <span>{d.props[1][1]}</span>
+      </li>
+      <li>
+        <b>{p3a}</b>
+        <span>
+          {p3b}<a href={E2B_URL} target="_blank" rel="noopener">E2B</a>{p3c}
+        </span>
+      </li>
+      <li>
+        <b>{p4a}</b>
+        <span>
+          {p4b}<a href={DOCS.design} target="_blank" rel="noopener">{p4c}</a>{p4d}
+        </span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  code { font-family: var(--font-mono); font-size: 12.5px; background: var(--code-bg); border: 1px solid var(--code-border);
+         border-radius: 5px; padding: 1px 6px; color: var(--text); }
+
+  .diagram {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 36px 32px 32px; border-radius: var(--r-xl);
+    background:
+      radial-gradient(circle at 50% 0%, var(--accent-soft), transparent 55%),
+      var(--surface-2);
+    border: 1px solid var(--border);
+  }
+  .node {
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--r-md);
+    box-shadow: var(--shadow-1);
+  }
+
+  .clients { display: flex; gap: 56px; flex-wrap: wrap; justify-content: center; }
+  .client { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .client .node { display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; }
+  .client b { display: block; font-size: 14px; font-weight: 600; }
+  .client small { display: block; font-size: 11.5px; color: var(--text-3); }
+  .node-icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+               border-radius: 8px; background: var(--surface-2); color: var(--text-2); }
+  .node-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7;
+                   stroke-linecap: round; stroke-linejoin: round; }
+  /* Each client drops its own line into the control plane's top edge, so the
+     diagram reads as a connection, not as a floating box. */
+  .client .drop { width: 1px; height: 22px; background: var(--border-strong); }
+
+  .plane { width: 100%; max-width: 720px; padding: 18px 20px 16px; border-color: var(--border-strong);
+           box-shadow: var(--shadow-3); }
+  .plane-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .plane-head b { font-size: 15px; font-weight: 650; }
+  .plane-head .chip { margin-left: auto; }
+  .plane-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+  .plane-grid > div { padding: 9px 11px; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--border); }
+  .plane-grid b { display: block; font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--text); }
+  .plane-grid small { display: block; font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
+  .plane-mem {
+    display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px 11px;
+    border-radius: var(--r-sm); border: 1px dashed var(--border-strong);
+    font-size: 12px; color: var(--text-2); flex-wrap: wrap;
+  }
+  .plane-mem svg { width: 15px; height: 15px; fill: none; stroke: var(--accent-text); stroke-width: 1.7;
+                   stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .plane-mem code { background: transparent; border: none; padding: 0; color: var(--text); }
+  .plane-mem span { color: var(--text-3); }
+
+  .fan { position: relative; width: 100%; max-width: 760px; height: 74px; }
+  .fan svg { display: block; width: 100%; height: 64px; overflow: visible; }
+  .fan path { fill: none; stroke: var(--border-strong); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  /* Sits in the empty corner between the bus and sandbox B, so it never
+     covers a connector. */
+  .fan .label {
+    position: absolute; left: calc(50% + 56px); top: 44px;
+    padding: 2px 10px; border-radius: 999px; background: var(--surface-2);
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--text-3); white-space: nowrap;
+  }
+
+  .sandboxes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; width: 100%; max-width: 760px; }
+  .box { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+  .box-head { display: flex; align-items: center; gap: 8px; }
+  .box-head b { font-size: 13.5px; font-weight: 600; }
+  .box-head .chip { margin-left: auto; height: 20px; font-size: 11px; padding: 0 7px; }
+  .box code { align-self: flex-start; margin-top: 4px; }
+  .box small { font-size: 11.5px; color: var(--text-3); }
+  .box.paused { background: var(--surface-2); box-shadow: none; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none;
+                box-shadow: 0 0 0 3px var(--accent-soft); animation: pulse 1.8s ease-in-out infinite; }
+  .status-dot.paused { background: var(--warn); box-shadow: none; animation: none; }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  .props {
+    list-style: none; margin: 28px 0 0; padding: 0;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;
+  }
+  .props li { padding: 0 0 0 16px; border-left: 2px solid var(--border-strong); }
+  .props b { display: block; font-size: 14px; font-weight: 620; margin-bottom: 4px; }
+  .props span { font-size: 13.5px; color: var(--text-2); line-height: 1.6; }
+
+  @media (max-width: 860px) {
+    .diagram { padding: 26px 18px 22px; }
+    .clients { gap: 20px; }
+    .plane-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sandboxes { grid-template-columns: 1fr; }
+    .props { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) {
+    .plane-grid { grid-template-columns: 1fr; }
+    .props { grid-template-columns: 1fr; }
+    .fan { height: 66px; }
+    .fan .label { left: 50%; transform: translateX(-50%); top: 34px; font-size: 9.5px; }
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+// Who it is for: the product's own framing (a personal or small-team agent you
+// carry around) plus the non-goals, said plainly so nobody is surprised.
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).usecases;
+---
+
+<section class="section" id="usecases">
+  <div class="shell usecases">
+    <div class="section-head">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2 set:html={d.title} />
+    </div>
+
+    <div class="fit">
+      {
+        d.fit.map(([who, what], i) => (
+          <div class="fit-item">
+            <span class="fit-no">0{i + 1}</span>
+            <h3>{who}</h3>
+            <p>{what}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="notyet">
+      <span class="notyet-label">{d.notYet}</span>
+      <ul>
+        {d.notYetItems.map((n) => <li>{n}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .fit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+  .fit-item { padding-top: 20px; border-top: 1px solid var(--border-strong); }
+  .fit-no { font-family: var(--font-mono); font-size: 12px; color: var(--accent-text); font-weight: 600; }
+  .fit-item h3 { margin-top: 10px; font-size: 19px; letter-spacing: -0.015em; }
+  .fit-item p { margin-top: 8px; font-size: 14.5px; line-height: 1.7; color: var(--text-2); }
+
+  .notyet {
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 56px;
+    padding: 16px 18px; border-radius: var(--r-md); background: var(--surface-2); border: 1px solid var(--border);
+  }
+  .notyet-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+  .notyet ul { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+  .notyet li { padding: 3px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border);
+               font-size: 12.5px; color: var(--text-3); }
+
+  @media (max-width: 860px) {
+    .fit { grid-template-columns: 1fr; gap: 24px; }
+    .notyet { margin-top: 36px; }
+  }
+</style>

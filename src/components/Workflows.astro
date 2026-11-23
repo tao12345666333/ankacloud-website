@@ -1,0 +1,54 @@
+---
+// The day-to-day surfaces, each one a real screenshot of the running product.
+import ProductShot from "./ProductShot.astro";
+import { t, type Lang } from "../i18n/ui";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const d = t(lang).workflows;
+const sources = ["/screenshots/board-desktop.webp", "/screenshots/memory-desktop.webp", "/screenshots/home-desktop.webp"];
+---
+
+<section class="section" id="workflows">
+  <div class="shell">
+    <div class="section-head">
+      <p class="eyebrow">{d.eyebrow}</p>
+      <h2 set:html={d.title} />
+    </div>
+
+    <div class="surfaces">
+      {
+        d.items.map((s, i) => (
+          <div class:list={["surface", { flip: i % 2 === 1 }]}>
+            <div class="surface-copy">
+              <span class="chip chip-accent">{s.tag}</span>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+            <ProductShot src={sources[i]} alt={s.alt} width={1440} height={900} class="surface-shot" />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .surfaces { display: flex; flex-direction: column; gap: 88px; }
+  .surface {
+    display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+    gap: 48px; align-items: center;
+  }
+  .surface.flip .surface-copy { order: 2; }
+  .surface-copy h3 { font-size: 26px; margin-top: 16px; letter-spacing: -0.02em; line-height: 1.25; }
+  .surface-copy p { margin-top: 14px; font-size: 15.5px; line-height: 1.75; color: var(--text-2); }
+  @media (max-width: 900px) {
+    .surfaces { gap: 56px; }
+    .surface { grid-template-columns: 1fr; gap: 22px; }
+    .surface.flip .surface-copy { order: 0; }
+    .surface-copy h3 { font-size: 22px; }
+  }
+</style>
