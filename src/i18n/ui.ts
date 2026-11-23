@@ -631,9 +631,11 @@ export function langFromPath(pathname: string): Lang {
   return pathname === "/zh" || pathname.startsWith("/zh/") ? "zh" : defaultLang;
 }
 
-/** "/docs/memory/" in English, "/zh/docs/memory/" in Chinese. */
+/** "/docs/memory/" in English, "/zh/docs/memory/" in Chinese, under the deploy
+ *  base ("/" on Cloudflare, "/<repo>/" on GitHub Pages). */
 export function path(lang: Lang, p: string): string {
   const clean = p.replace(/^\/|\/$/g, "");
   const base = lang === defaultLang ? "" : `/${lang}`;
-  return clean ? `${base}/${clean}/` : `${base}/`;
+  const prefix = import.meta.env.BASE_URL.replace(/\/$/, "");
+  return clean ? `${prefix}${base}/${clean}/` : `${prefix}${base}/`;
 }

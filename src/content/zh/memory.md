@@ -45,5 +45,5 @@ Anka 是嵌在控制面里的一个 agent，固定 session id 是 `home`。它�
 
 ## 下一步
 
-- [部署与运维](/zh/docs/self-hosting/)
+- [部署与运维](../self-hosting/)
 - [仓库里的设计文档](https://github.com/tao12345666333/ankacloud/blob/main/docs/DESIGN.md)

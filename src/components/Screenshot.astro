@@ -17,6 +17,8 @@ interface Props {
 }
 
 const { name, width, height, crop = "full", alt, caption, class: cls, priority = false } = Astro.props;
+// import.meta.env.BASE_URL is "/" on Cloudflare and "/<repo>/" on GitHub Pages.
+const src = `${import.meta.env.BASE_URL}screenshots/${name}.webp`;
 const [mode, px] = crop.split(":");
 const shown = mode === "top" ? Number(px) : height;
 ---
@@ -24,7 +26,7 @@ const shown = mode === "top" ? Number(px) : height;
 <figure class:list={["shot", cls]}>
   <div class="frame" style={`aspect-ratio:${width}/${shown}`}>
     <img
-      src={`/screenshots/${name}.webp`}
+      src={src}
       alt={alt}
       width={width}
       height={shown}

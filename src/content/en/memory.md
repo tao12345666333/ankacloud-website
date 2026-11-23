@@ -45,5 +45,5 @@ A skill is a directory: `skills/<name>/SKILL.md`, optionally with scripts and re
 
 ## Next
 
-- [Deploying and operating it](/docs/self-hosting/)
+- [Deploying and operating it](../self-hosting/)
 - [The design doc in the repository](https://github.com/tao12345666333/ankacloud/blob/main/docs/DESIGN.md)

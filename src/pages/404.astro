@@ -5,28 +5,31 @@ import Base from "../layouts/Base.astro";
 import Header from "../components/Header.astro";
 import BrandMark from "../components/BrandMark.astro";
 import Footer from "../components/Footer.astro";
-import { t } from "../i18n/ui";
+import { path, t } from "../i18n/ui";
 
 const en = t("en").notFound;
 const zh = t("zh").notFound;
 ---
 
-<Base title={en.title} description={en.description} lang="en" alternates={{ en: "/404", zh: "/404" }}>
-  <Header lang="en" otherHref="/zh/" />
+<Base title={en.title} description={en.description} lang="en" alternates={{ en: `${import.meta.env.BASE_URL}404`, zh: `${import.meta.env.BASE_URL}404` }}>
+  <Header lang="en" otherHref={path("zh", "/")} />
   <main class="not-found">
     <div class="shell">
       <BrandMark size={40} />
       <h1>404</h1>
       <p data-copy="en">{en.body}</p>
       <p data-copy="zh" lang="zh-CN" hidden>{zh.body}</p>
-      <a class="btn btn-primary" href="/" data-home>{en.home}</a>
+      <a class="btn btn-primary" href={import.meta.env.BASE_URL} data-home>{en.home}</a>
     </div>
   </main>
   <Footer lang="en" />
 </Base>
 
 <script>
-  if (location.pathname === "/zh" || location.pathname.startsWith("/zh/")) {
+  // The site is served from "/" on Cloudflare and "/<repo>/" on GitHub Pages.
+  const base = document.querySelector<HTMLAnchorElement>("[data-home]")?.getAttribute("href") ?? "/";
+  const here = location.pathname.slice(base.length);
+  if (here === "zh" || here.startsWith("zh/")) {
     document.documentElement.lang = "zh-CN";
     document.body.dataset.lang = "zh";
     for (const el of document.querySelectorAll<HTMLElement>("[data-copy]")) {
@@ -34,11 +37,11 @@ const zh = t("zh").notFound;
     }
     const home = document.querySelector<HTMLAnchorElement>("[data-home]");
     if (home) {
-      home.href = "/zh/";
+      home.href = `${base}zh/`;
       home.textContent = "回到首页";
     }
     const switcher = document.getElementById("lang-switch");
-    if (switcher) switcher.setAttribute("href", "/");
+    if (switcher) switcher.setAttribute("href", base);
   }
 </script>
 

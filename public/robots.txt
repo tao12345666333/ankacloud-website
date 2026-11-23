@@ -1,2 +1,4 @@
+# The GitHub Pages build is a staging environment; only the production domain
+# should be indexed. https://ankacloud.moelove.info serves its own robots.txt.
 User-agent: *
-Allow: /
+Disallow: /

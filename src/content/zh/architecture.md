@@ -50,5 +50,5 @@ Telegram (bot API) ─┘      单进程 FastAPI            sandbox B (thread B)
 
 ## 下一步
 
-- [长期记忆与 Anka](/zh/docs/memory/)
-- [部署与运维](/zh/docs/self-hosting/)
+- [长期记忆与 Anka](../memory/)
+- [部署与运维](../self-hosting/)

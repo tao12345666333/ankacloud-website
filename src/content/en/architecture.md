@@ -50,5 +50,5 @@ The result: **a page refresh never loses history** (it resumes from `?after_seq=
 
 ## Next
 
-- [Long-term memory and Anka](/docs/memory/)
-- [Deploying and operating it](/docs/self-hosting/)
+- [Long-term memory and Anka](../memory/)
+- [Deploying and operating it](../self-hosting/)

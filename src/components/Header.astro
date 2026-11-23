@@ -10,13 +10,16 @@ interface Props {
 }
 
 const { lang, otherHref } = Astro.props;
+// The home anchor works under any base path (Cloudflare serves "/", GitHub
+// Pages serves "/<repo>/").
+const home = import.meta.env.BASE_URL;
 const d = t(lang);
 const other: Lang = lang === "en" ? "zh" : "en";
 ---
 
 <header class="site-header">
   <div class="shell header-inner">
-    <a class="brand" href={path(lang, "/")} aria-label={d.header.home}>
+    <a class="brand" href={home} aria-label={d.header.home}>
       <BrandMark size={24} />
       <span class="brand-name">ankacloud</span>
     </a>
