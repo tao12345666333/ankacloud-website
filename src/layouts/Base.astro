@@ -12,7 +12,9 @@ interface Props {
 
 const { title, description, lang, alternates } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL("/og.png", Astro.site);
+// The base path must be included for the GitHub Pages staging deploy, which
+// serves everything under /<repo>/.
+const ogImage = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site);
 const htmlLang = { en: "en", zh: "zh-CN" } as const;
 ---
 
@@ -42,12 +44,16 @@ const htmlLang = { en: "en", zh: "zh-CN" } as const;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ankacloud — the agent you carry around, in an isolated cloud sandbox" />
     <meta property="og:locale" content={lang === "zh" ? "zh_CN" : "en_US"} />
     <meta property="og:locale:alternate" content={lang === "zh" ? "en_US" : "zh_CN"} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="ankacloud — the agent you carry around, in an isolated cloud sandbox" />
 
     <script is:inline>
       // Apply the saved theme before first paint, like the Web UI does, so a
