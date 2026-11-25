@@ -1,25 +1,60 @@
 ---
-// The product's sidebar mark: a terracotta tile with the agent's "eye".
+// The brand mark: Anka, a terracotta tile-shaped phoenix with a flame crest
+// and a half-lidded eye. `compact` drops the flames for very small sizes.
+// Exported assets live in public/brand/.
 interface Props {
   size?: number;
+  compact?: boolean;
 }
-const { size = 24 } = Astro.props;
-const radius = Math.round(size * 0.3);
-const eye = Math.round(size * 0.125);
+const { size = 24, compact = false } = Astro.props;
+const id = `bm${Math.random().toString(36).slice(2, 8)}`;
 ---
 
-<span
+<svg
   class="brand-mark"
-  style={`width:${size}px;height:${size}px;border-radius:${radius}px;--eye:${eye}px`}
-  aria-hidden="true"></span
+  width={size}
+  height={size}
+  viewBox="0 0 64 64"
+  aria-hidden="true"
+  focusable="false"
 >
+  <defs>
+    <linearGradient id={`${id}t`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c0461f" /><stop offset="1" stop-color="#9a3517" />
+    </linearGradient>
+    <linearGradient id={`${id}f`} x1="0" y1="25" x2="0" y2="2" gradientUnits="userSpaceOnUse">
+      <stop offset=".2" stop-color="#bd4520" /><stop offset="1" stop-color="#f08a5f" />
+    </linearGradient>
+    <clipPath id={`${id}e`}><circle cx="31" cy="40" r="11.5" /></clipPath>
+    <clipPath id={`${id}l`}><circle cx="31" cy="40" r="12.7" /></clipPath>
+  </defs>
+  {
+    !compact && (
+      <path
+        fill={`url(#${id}f)`}
+        d="M11.5 25C9.5 20 13.5 17 14.5 13.2C15 11.2 14.6 9.6 13.6 8.2C18.6 9.6 21.4 14 20.4 18.4C20 20.6 20.8 22.6 21.6 25ZM23.5 25C21 18 26.6 13.8 27.8 8.6C28.3 6.4 27.8 4.2 26.6 2C33.6 4.2 37.8 11 36.2 17.4C35.6 20 36.4 22.4 37.6 25ZM40 25C38.4 20.2 42.4 16.6 43.4 13C43.9 11 43.4 9.6 42.7 8.6C47.6 10.2 50.2 14.4 49.2 18.8C48.8 20.8 49.6 22.8 50.2 25Z"
+      />
+    )
+  }
+  <g transform={compact ? "translate(0 -8)" : undefined}>
+    <path fill="#e8784a" d="M53 34.6L61.4 39.2Q62.8 40 61.4 40.8L53 45.4Z" />
+    <rect x="4" y="20" width="51" height="40" rx="14" fill={`url(#${id}t)`} />
+    <circle cx="31" cy="40" r="11.5" fill="#fbf7f0" />
+    <g clip-path={`url(#${id}e)`}>
+      <circle cx="33.2" cy="41.8" r="7" fill="#17150f" />
+      <circle cx="35.6" cy="40.2" r="1.7" fill="#fbf7f0" />
+      <path fill="#8a2e12" d="M17 26H45V36.8L19.5 37.8H17Z" />
+    </g>
+    <path
+      clip-path={`url(#${id}l)`}
+      d="M17.5 37.88L44.5 36.72"
+      stroke="#17150f"
+      stroke-width="2.3"
+      stroke-linecap="round"
+    />
+  </g>
+</svg>
 
 <style>
-  .brand-mark {
-    display: inline-block; flex: none;
-    background:
-      radial-gradient(circle at 50% 50%, var(--surface) 0 var(--eye), transparent calc(var(--eye) + 0.5px)),
-      conic-gradient(from 210deg, var(--accent-fill), var(--accent-fill-hover), var(--accent-fill));
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent-contrast) 18%, transparent), var(--shadow-1);
-  }
+  .brand-mark { display: inline-block; flex: none; }
 </style>
