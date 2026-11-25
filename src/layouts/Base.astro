@@ -16,6 +16,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 // serves everything under /<repo>/.
 const ogImage = new URL(`${import.meta.env.BASE_URL}og.jpg`, Astro.site);
 const htmlLang = { en: "en", zh: "zh-CN" } as const;
+const staging = !!import.meta.env.PUBLIC_STAGING;
 ---
 
 <!doctype html>
@@ -28,6 +29,7 @@ const htmlLang = { en: "en", zh: "zh-CN" } as const;
     <meta name="theme-color" content="#14130f" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {staging && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     {
       (Object.entries(alternates) as [Lang, string][]).map(([code, href]) => (
