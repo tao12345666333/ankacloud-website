@@ -27,8 +27,13 @@ npx wrangler login   # once
 npm run deploy       # builds and deploys the Worker named in wrangler.jsonc
 ```
 
-Or let CI do it: `.github/workflows/deploy.yml` deploys on every push to `main`; add the
-`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets first.
+Or let CI do it: `.github/workflows/deploy.yml` deploys production on every push to `main`;
+add the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets first.
+
+Pull requests get a staging build on GitHub Pages (`.github/workflows/staging.yml`); the PR
+shows a "View deployment" link. There is one staging slot, so the latest PR push wins. The
+staging build sets `PUBLIC_STAGING`, which adds `noindex` to every page and makes
+`robots.txt` disallow crawling; production allows it.
 
 Before going live, set the real domain in `astro.config.mjs` (`site`) and in
 `src/data/site.ts` (`REPO_URL`, `REPO`, `VERSION`) if the repository or release moves.

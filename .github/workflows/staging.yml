@@ -1,11 +1,13 @@
 name: staging
 
-# GitHub Pages build of the site: a staging environment to look at changes
-# before they reach the Cloudflare Workers deployment.
-# One-time setup: Settings → Pages → Source: "GitHub Actions".
+# GitHub Pages build of the site: a staging environment to review a pull request
+# before it reaches the Cloudflare Workers production deployment. There is one
+# Pages site, so the latest PR push wins. PRs from forks get a read-only token
+# and skip the deploy.
+# One-time setup: Settings → Pages → Source: "GitHub Actions", and allow PR refs
+# (pattern "*/merge") in the github-pages environment's deployment branches.
 on:
-  push:
-    branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -19,6 +21,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,14 +31,18 @@ jobs:
           node-version: 22
           cache: npm
 
+      - id: pages
+        uses: actions/configure-pages@v5
+
       - run: npm ci
 
       # Pages serves the site under /<repo>/, so both the URL and the base path
-      # change; robots.txt in the repo keeps staging out of search engines.
+      # change.
       - run: npm run build
         env:
-          PUBLIC_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
-          PUBLIC_SITE_BASE: /${{ github.event.repository.name }}/
+          PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}/
+          PUBLIC_SITE_BASE: ${{ steps.pages.outputs.base_path }}/
+          PUBLIC_STAGING: "1"
 
       - uses: actions/upload-pages-artifact@v3
         with:

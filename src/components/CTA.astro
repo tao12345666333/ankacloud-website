@@ -15,7 +15,7 @@ const [bodyBefore, bodyAfter] = split(d.body, "{version}");
 <section class="cta-section">
   <div class="shell">
     <div class="cta-card">
-      <BrandMark size={48} />
+      <BrandMark size={64} />
       <h2 set:html={d.title} />
       <p>{bodyBefore}<b class="ver">v{VERSION}</b>{bodyAfter}</p>
       <div class="cta-actions">
@@ -39,7 +39,7 @@ const [bodyBefore, bodyAfter] = split(d.body, "{version}");
       var(--surface);
     border: 1px solid var(--border-strong); box-shadow: var(--shadow-2);
   }
-  .cta-card :global(.brand-mark) { box-shadow: var(--shadow-2); }
+  .cta-card :global(.brand-mark) { filter: drop-shadow(0 6px 14px rgb(154 53 23 / .22)); }
   .ver { color: var(--text); font-weight: 600; }
   h2 { margin-top: 22px; font-size: clamp(30px, 4.4vw, 46px); letter-spacing: -0.03em; }
   p { margin: 16px auto 0; max-width: 520px; color: var(--text-2); font-size: 16px; line-height: 1.7; }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="at" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c0461f"/><stop offset="1" stop-color="#9a3517"/></linearGradient>
+    <linearGradient id="af" x1="0" y1="25" x2="0" y2="2" gradientUnits="userSpaceOnUse"><stop offset=".2" stop-color="#bd4520"/><stop offset="1" stop-color="#f08a5f"/></linearGradient>
+    <clipPath id="ae"><circle cx="31" cy="26" r="11.5"/></clipPath>
+    <clipPath id="al"><circle cx="31" cy="26" r="12.7"/></clipPath>
+  </defs>
+  
+  <path fill="#e8784a" d="M53 20.6L61.4 25.2Q62.8 26 61.4 26.8L53 31.4Z"/>
+  <rect x="4" y="6" width="51" height="54" rx="14" fill="url(#at)"/>
+  <circle cx="31" cy="26" r="11.5" fill="#fbf7f0"/>
+  <g clip-path="url(#ae)">
+    <circle cx="33.2" cy="27.8" r="7" fill="#17150f"/>
+    <circle cx="35.6" cy="26.2" r="1.7" fill="#fbf7f0"/>
+    <path fill="#8a2e12" d="M17 12H45V22.8L19.5 23.8H17Z"/>
+  </g>
+  <path clip-path="url(#al)" d="M17.5 23.88L44.5 22.72" stroke="#17150f" stroke-width="2.3" stroke-linecap="round"/>
+</svg>

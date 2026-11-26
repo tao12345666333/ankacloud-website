@@ -20,8 +20,8 @@ const other: Lang = lang === "en" ? "zh" : "en";
 <header class="site-header">
   <div class="shell header-inner">
     <a class="brand" href={home} aria-label={d.header.home}>
-      <BrandMark size={24} />
-      <span class="brand-name">ankacloud</span>
+      <BrandMark size={32} />
+      <span class="brand-name">anka<span class="brand-name-tail">cloud</span></span>
     </a>
 
     <nav class="header-nav" aria-label="Main">
@@ -83,9 +83,10 @@ const other: Lang = lang === "en" ? "zh" : "en";
   }
   .site-header.scrolled { border-bottom-color: var(--border); }
   .header-inner { display: flex; align-items: center; gap: 28px; height: 64px; }
-  .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); }
+  .brand { display: inline-flex; align-items: center; gap: 8px; color: var(--text); }
   .brand:hover { text-decoration: none; }
   .brand-name { font-weight: 680; font-size: 16.5px; letter-spacing: -0.02em; }
+  .brand-name-tail { color: var(--text-3); }
   .header-nav { display: flex; align-items: center; gap: 4px; margin-left: 8px; }
   .header-nav a {
     padding: 7px 11px; border-radius: var(--r-sm); color: var(--text-2);
