@@ -37,6 +37,7 @@ const staging = !!import.meta.env.PUBLIC_STAGING;
       ))
     }
     <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLang] ?? "/", Astro.site)} />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="32x32" />
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
     <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
 

@@ -12,9 +12,8 @@ export default defineConfig({
   // GitHub Pages serves the site under /<repo>/; Cloudflare Workers serves it
   // at the root.
   base: process.env.PUBLIC_SITE_BASE ?? '/',
-  // English is the default language at /, Chinese lives under /zh/. The domain
-  // is provisional; emitting a sitemap from a wrong site URL would point search
-  // engines at the wrong place, so turn it on once the domain is set.
+  // English is the default language at /, Chinese lives under /zh/.
+  // src/pages/sitemap.xml.ts builds the sitemap from `site`.
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh'],
