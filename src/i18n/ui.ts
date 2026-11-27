@@ -22,7 +22,7 @@ export const ui = {
       theme: "Toggle light and dark theme",
     },
     hero: {
-      pill: "v0.11 · Per-thread provider and model selection",
+      pill: "v1.0 · Now open source, one docker run away",
       title1: "The agent you carry around,",
       title2Before: "in an ",
       title2Accent: "isolated",
@@ -262,6 +262,7 @@ export const ui = {
       step1: "Clone and install",
       step2: "Set the four required env vars",
       step3: "Start the server",
+      docker: "Docker",
       local: "Local",
       server: "On a server",
       logs: [
@@ -269,7 +270,7 @@ export const ui = {
         ["reconciler every", "60s", "· idle pause", "10m"],
         ["telegram channel", "not configured"],
       ],
-      links: { quick: "Full quickstart", deploy: "systemd deploy & operations" },
+      links: { docker: "Run with Docker", quick: "Full quickstart", deploy: "systemd deploy & operations" },
     },
     usecases: {
       eyebrow: "Who it's for",
@@ -322,7 +323,7 @@ export const ui = {
       theme: "切换深浅色主题",
     },
     hero: {
-      pill: "v0.11 · 支持按会话独立指定 Provider 与模型",
+      pill: "v1.0 · 正式开源，一条 docker run 即可启动",
       title1: "真正记得你的个人 Agent，",
       title2Before: "在",
       title2Accent: "完全隔离",
@@ -562,6 +563,7 @@ export const ui = {
       step1: "克隆仓库并安装依赖",
       step2: "配置四个必填环境变量",
       step3: "启动服务",
+      docker: "Docker",
       local: "本地运行",
       server: "服务器部署",
       logs: [
@@ -569,7 +571,7 @@ export const ui = {
         ["reconciler every", "60s", "· 闲置休眠", "10m"],
         ["telegram channel", "未配置"],
       ],
-      links: { quick: "完整快速开始指南", deploy: "systemd 部署与运维指南" },
+      links: { docker: "使用 Docker 运行", quick: "完整快速开始指南", deploy: "systemd 部署与运维指南" },
     },
     usecases: {
       eyebrow: "适合谁用",

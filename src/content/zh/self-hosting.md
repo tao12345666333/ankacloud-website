@@ -8,9 +8,27 @@ eyebrow: 部署运维
 
 控制面需要保持长期运行：reconciler 要持续巡检沙箱状态，Web API 和记忆 API 也需要保持在线，供云端沙箱随时回调。一台小型 VPS、家用 NAS 或常驻云主机就能轻松胜任。
 
-前置条件仅需 Python ≥ 3.11，以及一个公网可达地址（用于访问 Web UI 与沙箱回调记忆 API）。
+前置条件仅需 Docker（或 Python ≥ 3.11），以及一个公网可达地址（用于访问 Web UI 与沙箱回调记忆 API）。
 
-## 本地运行
+## 使用 Docker 运行
+
+每次发布 Release 都会自动构建多架构（amd64/arm64）镜像并推送到 `ghcr.io/tao12345666333/ankacloud`，标签包括 `1.0.0`、`1.0`、`1` 和 `latest`。一个容器就是完整的控制面，SQLite 数据库和 Agent 的记忆与配置都保存在 `/data` 卷中。
+
+```bash
+docker run -d --name ankacloud --restart unless-stopped \
+  -p 127.0.0.1:8000:8000 \
+  -v ankacloud-data:/data \
+  -e E2B_API_KEY=e2b_... \
+  -e OR_URL=https://openrouter.ai/api/v1 -e OR_KEY=sk-or-... -e OR_MODEL=openai/gpt-4o \
+  -e ANKACLOUD_WEB_TOKEN="$(openssl rand -hex 24)" \
+  ghcr.io/tao12345666333/ankacloud:1
+
+curl http://127.0.0.1:8000/api/health    # {"ok": true, "version": "1.0.0"}
+```
+
+需要完整配置时，把 `deploy/env.example` 复制为 `deploy/.env` 并填好，再执行 `docker compose -f deploy/docker-compose.yml up -d`。升级只需 `docker compose pull && docker compose up -d`；备份时对 `ankacloud-data` 卷做快照即可。容器以非特权用户运行，在容器内监听 `0.0.0.0:8000`；如需公网访问，在前面加一层 Tailscale Serve、Nginx 或 Caddy。
+
+## 从源码运行
 
 ```bash
 git clone https://github.com/tao12345666333/ankacloud.git

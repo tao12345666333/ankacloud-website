@@ -9,6 +9,7 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang).quickstart;
 const tabs = [
+  { label: d.docker, cmd: INSTALL.docker },
   { label: d.local, cmd: INSTALL.run },
   { label: d.server, cmd: INSTALL.install },
 ];
@@ -52,6 +53,7 @@ const tabs = [
         </div>
       </div>
       <p class="links">
+        <a href={DOCS.docker} target="_blank" rel="noopener">{d.links.docker} →</a>
         <a href={DOCS.quickstart} target="_blank" rel="noopener">{d.links.quick} →</a>
         <a href={DOCS.deploy} target="_blank" rel="noopener">{d.links.deploy} →</a>
       </p>
