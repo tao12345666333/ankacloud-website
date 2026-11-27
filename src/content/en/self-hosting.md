@@ -8,9 +8,27 @@ eyebrow: Deployment
 
 The control plane is a long-running process: the reconciler needs to keep running, and both the web UI and memory API must stay reachable because sandboxes call back into them. It runs comfortably on any small VPS, a home NAS, or an always-on cloud instance.
 
-You need Python ≥ 3.11 and a public address (for the web UI and for sandboxes calling the memory API).
+You need Docker (or Python ≥ 3.11) and a public address (for the web UI and for sandboxes calling the memory API).
 
-## Running locally
+## Running with Docker
+
+Every release publishes a multi-arch (amd64/arm64) image to `ghcr.io/tao12345666333/ankacloud`, tagged `1.0.0`, `1.0`, `1`, and `latest`. One container is the whole control plane; the SQLite database and the agent's memory and config live in the `/data` volume.
+
+```bash
+docker run -d --name ankacloud --restart unless-stopped \
+  -p 127.0.0.1:8000:8000 \
+  -v ankacloud-data:/data \
+  -e E2B_API_KEY=e2b_... \
+  -e OR_URL=https://openrouter.ai/api/v1 -e OR_KEY=sk-or-... -e OR_MODEL=openai/gpt-4o \
+  -e ANKACLOUD_WEB_TOKEN="$(openssl rand -hex 24)" \
+  ghcr.io/tao12345666333/ankacloud:1
+
+curl http://127.0.0.1:8000/api/health    # {"ok": true, "version": "1.0.0"}
+```
+
+For a full configuration, copy `deploy/env.example` to `deploy/.env` and run `docker compose -f deploy/docker-compose.yml up -d`. To upgrade, run `docker compose pull && docker compose up -d`; to back up, snapshot the `ankacloud-data` volume. The container runs as an unprivileged user and listens on `0.0.0.0:8000` inside the container; put Tailscale Serve, Nginx, or Caddy in front of it for public access.
+
+## Running from source
 
 ```bash
 git clone https://github.com/tao12345666333/ankacloud.git
